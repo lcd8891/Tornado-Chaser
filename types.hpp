@@ -1,6 +1,6 @@
 #pragma once
 
-using int16 = char;
+using int8 = char;
 using uint8 = unsigned char;
 using int16 = short;
 using uint16 = unsigned short;

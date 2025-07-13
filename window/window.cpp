@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include "window.hpp"
+#include "../vector.hpp"
+#include "../types.hpp"
 
 namespace Window{
     GLFWwindow *window;
