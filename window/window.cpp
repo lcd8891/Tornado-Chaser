@@ -10,6 +10,7 @@ namespace Window{
     vector2<uint16> size;
     bool mouse_locked = false;
     bool fullscreen = false;
+    bool focus = true;
     void initialize(std::string _name, vector2<uint16> _size){
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
@@ -20,11 +21,13 @@ namespace Window{
         window = glfwCreateWindow(size.y,_size.y,_name.c_str(),nullptr,nullptr);
         if(!window){
             glfwTerminate();
+            throw EXIT_INFO("Couldn't create new window!",1);
         }
         glfwMakeContextCurrent(window);
         glewExperimental = true;
         if(glewInit()!=GLEW_OK){
             glfwTerminate();
+            throw EXIT_INFO("Couldn't initialize OpenGL!",2);
         }
         glViewport(0,0,size.x,size.y);
         glEnable(GL_BLEND);
@@ -66,5 +69,10 @@ namespace Window{
             size.x=1280;size.y=720;
         }
         glViewport(0,0,size.x,size.y);
+    }
+    void setIcon(vector2<uint32> size,uint8 *pixels){
+        GLFWimage ico;
+        ico.height=size.y;ico.width=size.x;ico.pixels=pixels;
+        glfwSetWindowIcon(window,1,&ico);
     }
 }
