@@ -1,21 +1,21 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-
-namespace{
-    const unsigned short default_size[2];
-}
+#include "window.hpp"
 
 namespace Window{
     GLFWwindow *window;
-    void initialize(std::string name, unsigned short size[2]){
+    vector2<uint16> size;
+    bool mouse_locked = false;
+    bool fullscreen = false;
+    void initialize(std::string _name, vector2<uint16> _size){
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
         glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE,true);
-
-        window = glfwCreateWindow(size[0],size[1],name.c_str(),nullptr,nullptr);
+        size=_size;
+        window = glfwCreateWindow(size.y,_size.y,_name.c_str(),nullptr,nullptr);
         if(!window){
             glfwTerminate();
         }
@@ -24,7 +24,45 @@ namespace Window{
         if(glewInit()!=GLEW_OK){
             glfwTerminate();
         }
+        glViewport(0,0,size.x,size.y);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_CULL_FACE);
+        glDepthFunc(GL_LESS);
         
-        
+        glfwSetWindowSizeLimits(window,800,600,-1,-1);
+    }
+
+    void close(){
+        glfwSetWindowShouldClose(window,true);
+    }
+    bool isClose(){
+        return !glfwWindowShouldClose(window);
+    }
+    void display(){
+        glfwSwapBuffers(window);
+    }
+    void lockMouse(bool locked){
+        mouse_locked=locked;
+        glfwSetInputMode(window,GLFW_CURSOR,locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
+    void terminate(){
+        glfwTerminate();
+    }
+    void setMouseType(int type){
+        glfwSetCursor(window,glfwCreateStandardCursor(type));
+    }
+    void setFullscreen(bool _fullscreen){
+        fullscreen = _fullscreen;
+        GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+        if(fullscreen){
+            glfwSetWindowMonitor(window,monitor,0,0,mode->width,mode->height,mode->refreshRate);
+            size.x=mode->width;size.y=mode->height;
+        }else{
+            glfwSetWindowMonitor(window,nullptr,mode->width/2-1280/2,mode->height/2-720/2,1280,720,0);
+            size.x=1280;size.y=720;
+        }
+        glViewport(0,0,size.x,size.y);
     }
 }
