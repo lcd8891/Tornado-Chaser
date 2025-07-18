@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "window/window.hpp"
+#include "window/event.hpp"
 #include "vector.hpp"
 #include "types.hpp"
 #include <string>
@@ -9,9 +10,19 @@ namespace Lite3D{
     void terminate(){
         Window::terminate();
     }
+
+    void startCycle(){
+        while(!Window::isClose()){
+            Event::pollEvents();
+
+            Window::display();
+        }
+    }
+
     void start(){
         Window::initialize("Tornado Chaser",vector2<uint16>(1280,720));
         sf::Image ico;ico.loadFromFile("./res/icon.png");
         Window::setIcon({ico.getSize().x,ico.getSize().y},const_cast<uint8*>(ico.getPixelsPtr()));
+        startCycle();
     }
 }

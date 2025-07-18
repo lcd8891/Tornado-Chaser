@@ -12,16 +12,14 @@ namespace{
     uint32* _frames;
     uint32 _current;
     bool _cursor_started;
-    
 }
 
 namespace Event{
     vector2<int16> mouse_pos; 
     vector2<int16> mouse_delta;
-    void (*close_callback)(GLFWwindow* window) = nullptr;
-    void (*focus_callback)(GLFWwindow* window,int focused) = nullptr;
     int8 mwheel_delta;
     uint32 char_input;
+    bool focused;
 
     void window_size_callback(GLFWwindow* window, int width, int height){
         Window::size.x = width;
@@ -39,10 +37,7 @@ namespace Event{
         mouse_pos.y=ypos;
     }
     void window_focus_callback(GLFWwindow *window,int focused){
-        if(focus_callback)focus_callback(window,focused);
-    }
-    void window_close_callback(GLFWwindow *window){
-        if(close_callback)close_callback(window);
+        Event::focused = focused;
     }
     void mouse_button_callback(GLFWwindow* window, int button, int action, int mode){
         if (action == GLFW_PRESS){
@@ -77,12 +72,7 @@ namespace Event{
         memset(_frames,0,sizeof(uint32)*1032);
         memset(_keys,false,sizeof(bool)*1032);
 
-        if(close_callback){
-            glfwSetWindowCloseCallback(Window::window,window_close_callback);
-        }
-        if(focus_callback){
-            glfwSetWindowFocusCallback(Window::window,window_focus_callback);
-        }
+        glfwSetWindowFocusCallback(Window::window,window_focus_callback);
         glfwSetWindowSizeCallback(Window::window,window_size_callback);
         glfwSetMouseButtonCallback(Window::window,mouse_button_callback);
         glfwSetCursorPosCallback(Window::window,cursor_position_callback);

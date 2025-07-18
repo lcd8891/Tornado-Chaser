@@ -42,7 +42,7 @@ namespace Window{
         glfwSetWindowShouldClose(window,true);
     }
     bool isClose(){
-        return !glfwWindowShouldClose(window);
+        return glfwWindowShouldClose(window);
     }
     void display(){
         glfwSwapBuffers(window);
