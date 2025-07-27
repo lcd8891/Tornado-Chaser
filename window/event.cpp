@@ -86,6 +86,7 @@ namespace Event{
         mouse_delta = {0,0};
         mwheel_delta = 0;
         char_input = 0;
+        _current++;
         glfwPollEvents();
     }
     bool key(int keycode){
