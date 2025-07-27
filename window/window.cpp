@@ -4,21 +4,22 @@
 #include "window.hpp"
 #include "../vector.hpp"
 #include "../types.hpp"
+#include "../graphics/screenmanager.hpp"
 
 namespace Window{
     GLFWwindow *window;
-    vector2<uint16> size;
+    vector2<int> size;
     bool mouse_locked = false;
     bool fullscreen = false;
     bool focus = true;
-    void initialize(std::string _name, vector2<uint16> _size){
+    void initialize(std::string _name, vector2<int> _size){
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
         glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE,true);
         size=_size;
-        window = glfwCreateWindow(size.y,_size.y,_name.c_str(),nullptr,nullptr);
+        window = glfwCreateWindow(_size.x,_size.y,_name.c_str(),nullptr,nullptr);
         if(!window){
             glfwTerminate();
             throw EXIT_INFO("Couldn't create new window!",1);
@@ -30,12 +31,18 @@ namespace Window{
             throw EXIT_INFO("Couldn't initialize OpenGL!",2);
         }
         glViewport(0,0,size.x,size.y);
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
         glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+
         glDepthFunc(GL_LESS);
-        
+
         glfwSetWindowSizeLimits(window,800,600,-1,-1);
+        Screenmanager::recalculate_screenview();
     }
 
     void close(){
@@ -69,6 +76,7 @@ namespace Window{
             size.x=1280;size.y=720;
         }
         glViewport(0,0,size.x,size.y);
+        Screenmanager::recalculate_screenview();
     }
     void setIcon(vector2<uint32> size,uint8 *pixels){
         GLFWimage ico;

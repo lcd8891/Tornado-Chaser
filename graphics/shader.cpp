@@ -6,13 +6,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 std::string loadStringFromFile(std::string Path){
-    std::stringstream ss;
     std::ifstream file(Path);
     if(!file.is_open()){throw EXIT_INFO("Shader file not found: "+Path,3);}
-    std::string line;
-    while(std::getline(file,line)){
-        ss << line;
-    }
+    std::stringstream ss;
+    ss << file.rdbuf();
     return ss.str();
 }
 
@@ -27,7 +24,7 @@ void Shader::use(){
 
 void Shader::uniformMatrix(std::string name,glm::mat4 _mat){
     GLuint location = glGetUniformLocation(ID,name.c_str());
-    glUniformMatrix4fv(location,1,false,glm::value_ptr(_mat));
+    glUniformMatrix4fv(location,1,GL_FALSE,glm::value_ptr(_mat));
 }
 void Shader::uniformInt(std::string name,int _int){
     GLuint location = glGetUniformLocation(ID,name.c_str());
@@ -47,8 +44,10 @@ void Shader::uniform3Float(std::string name,float _x,float _y,float _z){
 }
 
 Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string geomPath){
-    const GLchar* vertCode = loadStringFromFile(vertPath).c_str();
-    const GLchar* fragCode = loadStringFromFile(fragPath).c_str();
+    std::string vertstr = loadStringFromFile(vertPath);
+    std::string fragstr = loadStringFromFile(fragPath);
+    const GLchar* vertCode = vertstr.c_str();
+    const GLchar* fragCode = fragstr.c_str();
 
     GLuint vertex,fragment,geometry;
     GLint success;
@@ -81,8 +80,9 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
     glAttachShader(ID,fragment);
 
     if(geomPath!=""){
-        const GLchar* geomCode = loadStringFromFile(geomPath).c_str();
-        geometry = glCreateShader(GL_VERTEX_SHADER);
+        std::string geomstr = loadStringFromFile(geomPath);
+        const GLchar* geomCode = geomstr.c_str();
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geometry,1,&geomCode,nullptr);
         glCompileShader(geometry);
         glGetShaderiv(geometry,GL_COMPILE_STATUS,&success);
@@ -96,6 +96,7 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
         }
         glAttachShader(ID,geometry);
     }
+    glLinkProgram(ID);
     
     glGetProgramiv(ID,GL_LINK_STATUS,&success);
     if(!success){
@@ -150,7 +151,7 @@ Shader *initShaderFromString(std::string vertPath,std::string fragPath,std::stri
 
     if(geomPath!=""){
         const GLchar* geomCode = geomPath.c_str();
-        geometry = glCreateShader(GL_VERTEX_SHADER);
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geometry,1,&geomCode,nullptr);
         glCompileShader(geometry);
         glGetShaderiv(geometry,GL_COMPILE_STATUS,&success);

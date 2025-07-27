@@ -11,11 +11,11 @@ using uint32 = unsigned int;
 
 namespace Window{
     extern GLFWwindow *window;
-    extern vector2<uint16> size;
+    extern vector2<int> size;
     extern bool mouse_locked;
     extern bool fullscreen;
     extern bool focus;
-    void initialize(std::string _name, vector2<uint16> _size);
+    void initialize(std::string _name, vector2<int> _size);
     void close();
     bool isClose();
     void display();
