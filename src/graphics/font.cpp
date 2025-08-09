@@ -3,7 +3,6 @@
 #include "shader.hpp"
 #include "texture.hpp"
 #include <vector>
-#include <freetype2/ft2build.h>
 #include <map>
 #include <GL/glew.h>
 #include <cstring>
@@ -42,21 +41,21 @@ namespace Font{
     void initialize(){
         textShader = initShaderFromFile("./res/shaders/textShader.vert","./res/shaders/textShader.frag","./res/shaders/textShader.geom");
         if(FT_Init_FreeType(&ft)){
-            throw EXIT_INFO("couldn't initialize freetype!",8);
+            throw EXIT_INFO("couldn't initialize freetype!");
         }
     }
     void updateLocale(std::string _locale){
         Locale locale = {0,0};
         if(_locale!="english"){
             std::ifstream file("./res/locale/"+_locale+".loc",std::ios::binary);
-            if(!file.is_open())throw EXIT_INFO("couldn't load locale file",11);
+            if(!file.is_open())throw EXIT_INFO("couldn't load locale file");
             file.read(reinterpret_cast<char*>(&locale.charCount),sizeof(uint16));
             file.read(reinterpret_cast<char*>(&locale.charPos),sizeof(uint32));
             file.close();
         }
         FT_Face face;
         if(FT_New_Face(ft,"./res/font.ttf",0,&face)){
-            throw EXIT_INFO("couldn't load font!",9);
+            throw EXIT_INFO("couldn't load font!");
         }
         FT_Set_Pixel_Sizes(face,0,CHAR_SIZE);
         GLbyte *atlasData = new GLbyte[FONT_ATLAS_SIZE*FONT_ATLAS_SIZE];

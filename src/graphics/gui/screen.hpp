@@ -3,11 +3,11 @@
 #include "screenelements.hpp"
 
 struct Screen{
-    std::vector<Elements> elements;
-    unsigned int ID;
+    std::vector<ScreenElement> elements;
     bool lockmouse;
     bool background;
 
-    Screen(unsigned int _ID,bool _lockmouse,bool _background);
-    void AddElement(Elements el);
+    Screen();
+    Screen(bool _lockmouse,bool _background);
+    void AddElement(ScreenElement el);
 };
