@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <lite3D/window/window.hpp>
+#include <glm/ext.hpp>
 
 namespace Window{
     GLFWwindow *window;
@@ -29,13 +30,9 @@ namespace Window{
         }
         glViewport(0,0,size.x,size.y);
 
-        glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
-        glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glFrontFace(GL_CW);
-
         glDepthFunc(GL_LESS);
 
         glfwSetWindowSizeLimits(window,800,600,-1,-1);
@@ -80,5 +77,10 @@ namespace Window{
         GLFWimage ico;
         ico.height=size.y;ico.width=size.x;ico.pixels=pixels;
         glfwSetWindowIcon(window,1,&ico);
+    }
+    glm::mat4 getView(){
+        glm::mat4 mat = glm::translate(glm::mat4(1.f),glm::vec3(-1,1,0));
+        mat = glm::scale(mat,glm::vec3(2.f / size.x,-2.f / size.y,1));
+        return mat;
     }
 }

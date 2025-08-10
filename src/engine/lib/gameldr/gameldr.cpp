@@ -28,8 +28,9 @@ namespace GameLDR{
         static void* handle = nullptr;
     #endif
     void loadgame(std::string name){
+        std::string fullpath = std::filesystem::current_path().string();
         if(!std::filesystem::exists(name+LIB_FORMAT)){
-            throw EXIT_INFO("Couldn't find file "+name+LIB_FORMAT);
+            throw EXIT_INFO("Couldn't find file "+fullpath+"/"+name+LIB_FORMAT);
         }
         #ifdef _WIN32
             handle = LoadLibraryA((name+LIB_FORMAT).c_str());

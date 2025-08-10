@@ -57,10 +57,9 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
     glCompileShader(vertex);
     glGetShaderiv(vertex,GL_COMPILE_STATUS,&success);
     if(!success){
-        std::string infoLog;
-        infoLog.resize(512);
+        GLchar infoLog[512];
         glGetShaderInfoLog(vertex,512,nullptr,&infoLog[0]);
-        throw EXIT_INFO(infoLog+"\nvertex shader compilation error!");
+        throw EXIT_INFO(std::string(infoLog)+"\nvertex shader compilation error!");
     }
 
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -68,11 +67,10 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
     glCompileShader(fragment);
     glGetShaderiv(fragment,GL_COMPILE_STATUS,&success);
     if(!success){
-        std::string infoLog;
-        infoLog.resize(512);
+        GLchar infoLog[512];
         glGetShaderInfoLog(fragment,512,nullptr,&infoLog[0]);
         glDeleteShader(vertex);
-        throw EXIT_INFO(infoLog+"\nfragment shader compilation error!");
+        throw EXIT_INFO(std::string(infoLog)+"\nfragment shader compilation error!");
     }
 
     GLuint ID = glCreateProgram();
@@ -87,12 +85,11 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
         glCompileShader(geometry);
         glGetShaderiv(geometry,GL_COMPILE_STATUS,&success);
         if(!success){
-            std::string infoLog;
-            infoLog.resize(512);
+            GLchar infoLog[512];
             glGetShaderInfoLog(geometry,512,nullptr,&infoLog[0]);
             glDeleteShader(vertex);
             glDeleteShader(fragment);
-            throw EXIT_INFO(infoLog+"\ngeometry shader compilation error!");
+            throw EXIT_INFO(std::string(infoLog)+"\ngeometry shader compilation error!");
         }
         glAttachShader(ID,geometry);
     }
@@ -100,13 +97,13 @@ Shader *initShaderFromFile(std::string vertPath,std::string fragPath,std::string
     
     glGetProgramiv(ID,GL_LINK_STATUS,&success);
     if(!success){
-        std::string infoLog;
+        GLchar infoLog[512];
         glGetProgramInfoLog(ID,512,nullptr,&infoLog[0]);
         glDeleteShader(vertex);
         glDeleteShader(fragment);
         if(glIsShader(geometry))glDeleteShader(geometry);
         glDeleteProgram(ID);
-        throw EXIT_INFO("shader linking error");
+        throw EXIT_INFO(std::string(infoLog)+"\nshader linking error");
     }
     glDeleteShader(vertex);
     glDeleteShader(fragment);
@@ -127,10 +124,9 @@ Shader *initShaderFromString(std::string vertPath,std::string fragPath,std::stri
     glCompileShader(vertex);
     glGetShaderiv(vertex,GL_COMPILE_STATUS,&success);
     if(!success){
-        std::string infoLog;
-        infoLog.resize(512);
+        GLchar infoLog[512];
         glGetShaderInfoLog(vertex,512,nullptr,&infoLog[0]);
-        throw EXIT_INFO(infoLog+"\nvertex shader compilation error!");
+        throw EXIT_INFO(std::string(infoLog)+"\nvertex shader compilation error!");
     }
 
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -138,11 +134,10 @@ Shader *initShaderFromString(std::string vertPath,std::string fragPath,std::stri
     glCompileShader(fragment);
     glGetShaderiv(fragment,GL_COMPILE_STATUS,&success);
     if(!success){
-        std::string infoLog;
-        infoLog.resize(512);
+        GLchar infoLog[512];
         glGetShaderInfoLog(fragment,512,nullptr,&infoLog[0]);
         glDeleteShader(vertex);
-        throw EXIT_INFO(infoLog+"\nfragment shader compilation error!");
+        throw EXIT_INFO(std::string(infoLog)+"\nfragment shader compilation error!");
     }
 
     GLuint ID = glCreateProgram();
@@ -156,25 +151,24 @@ Shader *initShaderFromString(std::string vertPath,std::string fragPath,std::stri
         glCompileShader(geometry);
         glGetShaderiv(geometry,GL_COMPILE_STATUS,&success);
         if(!success){
-            std::string infoLog;
-            infoLog.resize(512);
+            GLchar infoLog[512];
             glGetShaderInfoLog(geometry,512,nullptr,&infoLog[0]);
             glDeleteShader(vertex);
             glDeleteShader(fragment);
-            throw EXIT_INFO(infoLog+"\ngeometry shader compilation error!");
+            throw EXIT_INFO(std::string(infoLog)+"\ngeometry shader compilation error!");
         }
         glAttachShader(ID,geometry);
     }
     
     glGetProgramiv(ID,GL_LINK_STATUS,&success);
     if(!success){
-        std::string infoLog;
+        GLchar infoLog[512];
         glGetProgramInfoLog(ID,512,nullptr,&infoLog[0]);
         glDeleteShader(vertex);
         glDeleteShader(fragment);
         if(glIsShader(geometry))glDeleteShader(geometry);
         glDeleteProgram(ID);
-        throw EXIT_INFO("shader linking error");
+        throw EXIT_INFO(std::string(infoLog)+"\nshader linking error");
     }
     glDeleteShader(vertex);
     glDeleteShader(fragment);

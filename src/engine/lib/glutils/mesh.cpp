@@ -33,13 +33,13 @@ void Mesh::reload(const float* _buffer,size _vertices){
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_size * _vertices, _buffer, GL_STATIC_DRAW);
 	this->vertices = _vertices;
 }
-void Mesh::draw(unsigned int _primitive){
+void Mesh::draw(Primitive _primitive){
     glBindVertexArray(vao);
-    glDrawArrays(_primitive,0,vertices);
+    glDrawArrays((unsigned int)(_primitive),0,vertices);
     glBindVertexArray(0);
 }
-void Mesh::draw(unsigned int _primitive,size _vertices,size offset){
+void Mesh::draw(Primitive _primitive,size _vertices,size offset){
     glBindVertexArray(vao);
-    glDrawArrays(_primitive,offset,_vertices);
+    glDrawArrays((unsigned int)(_primitive),offset,_vertices);
     glBindVertexArray(0);
 }

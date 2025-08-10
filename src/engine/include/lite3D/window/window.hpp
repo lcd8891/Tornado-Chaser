@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include "../lite_utils.hpp"
+#include <glm/matrix.hpp>
 
 template<typename T>
 struct vector2;
@@ -26,4 +27,5 @@ namespace Window{
     void setFullscreen(bool _fullscreen);
     void setTitle(std::string str);
     void setIcon(vector2<uint32> size,uint8 *pixels);
+    glm::mat4 getView();
 }

@@ -4,21 +4,27 @@
 #include "args.hpp"
 #include <string>
 #include <SFML/Graphics/Image.hpp>
+#include <lite3d/lite_buffer.hpp>
 
 #define ENGINE_VERSION 1
 
 namespace{
 
     void process_f1(){
-        if(Event::keyp(GLFW_KEY_Q)){
+        if(Event::keyp(KBKey::Q)){
             Window::close();
+            Logger::waning("forced terminate!");
+        }
+        if(Event::keyp(KBKey::BACKSLASH)){
+            Logger::error("force exception!");
+            throw EXIT_INFO("Forced exception!");
         }
     }
 
     void loop(){
         while(!Window::isClose()){
             Event::pollEvents();
-            if(Event::key(GLFW_KEY_F1)){
+            if(Event::key(KBKey::F1)){
                 process_f1();
             }
             LITE3D_GAME::on_frame();
@@ -52,6 +58,7 @@ namespace Lite3D{
         Event::initialize();
         Logger::info("Window initialized");
         set_icon();
+        LITE3D_GAME::on_initialize();
         loop();
         LITE3D_GAME::on_exit();
         terminate();
@@ -59,5 +66,7 @@ namespace Lite3D{
     void terminate(){
         GameLDR::unload();
         Window::terminate();
+        ShaderBuffer::delete_all();
+        TextureBuffer::delete_all();
     }
 }

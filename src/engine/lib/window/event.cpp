@@ -85,23 +85,21 @@ namespace Event{
         _current++;
         glfwPollEvents();
     }
-    bool key(int keycode){
-        if(keycode<0 || keycode>= _MOUSE_BUTTONS)return false;
-        return _keys[keycode];
+    bool key(KBKey key){
+        return _keys[(int)key];
     }
 
-    bool keyp(int keycode){
-        if(keycode<0 || keycode>= _MOUSE_BUTTONS)return false;
-        return _keys[keycode] && _frames[keycode] == _current;
+    bool keyp(KBKey key){
+        return _keys[(int)key] && _frames[(int)key] == _current;
     }
 
-    bool mouse(int button){
-        int index = _MOUSE_BUTTONS+button;
+    bool mouse(MButton btt){
+        int index = _MOUSE_BUTTONS+(int)btt;
         return _keys[index];
     }
 
-    bool mousep(int button){
-        int index = _MOUSE_BUTTONS+button;
+    bool mousep(MButton btt){
+        int index = _MOUSE_BUTTONS+(int)btt;
         return _keys[index] && _frames[index] == _current;
     }
 }

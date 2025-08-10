@@ -8,8 +8,8 @@ int main(int argc,char** argv){
     try{
         Lite3D::start();
     }catch(const EXIT_INFO &ei){
-        Logger::terminate(ei);
         Lite3D::show_error(ei.info);
+        Logger::terminate(ei);
         Lite3D::terminate();
         return 1;
     }
