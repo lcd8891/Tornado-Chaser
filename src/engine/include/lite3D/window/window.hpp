@@ -27,5 +27,6 @@ namespace Window{
     void setFullscreen(bool _fullscreen);
     void setTitle(std::string str);
     void setIcon(vector2<uint32> size,uint8 *pixels);
+    void updateFPS();
     glm::mat4 getView();
 }

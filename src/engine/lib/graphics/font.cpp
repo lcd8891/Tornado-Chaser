@@ -5,10 +5,13 @@
 #include <lite3D/lite_utils.hpp>
 #include <fstream>
 #include <GL/gl.h>
+#include "../buffer/loc_buffer.hpp"
 #include FT_FREETYPE_H
 
 #define FONT_ATLAS_SIZE 2048
 #define CHAR_SIZE 64
+
+struct CharMeta;
 
 namespace{
     FT_Library ft;
@@ -33,7 +36,7 @@ namespace FontLoader{
             throw EXIT_INFO("Couldn't initialize freetype library!");
         }
     }
-    Texture* updateLocale(std::string _locale){
+    void updateLocale(std::string _locale){
         Locale locale = {0,0};
         if(_locale!="english"){
             std::ifstream file("./res/locale/"+_locale+".loc",std::ios::binary);
@@ -107,7 +110,7 @@ namespace FontLoader{
         }
         FT_Done_Face(face);
         Logger::info("locale updated to "+_locale);
-        return new Texture(atlasData,{FONT_ATLAS_SIZE,FONT_ATLAS_SIZE},GL_RED);
+        TextureBuffer::setTexture("glyph_atlas",new Texture(atlasData,{FONT_ATLAS_SIZE,FONT_ATLAS_SIZE},GL_RED));
     }
     void cleanup(){
         FT_Done_FreeType(ft);

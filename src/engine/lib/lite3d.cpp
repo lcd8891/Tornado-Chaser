@@ -4,7 +4,8 @@
 #include "args.hpp"
 #include <string>
 #include <SFML/Graphics/Image.hpp>
-#include <lite3d/lite_buffer.hpp>
+#include <lite3D/lite_buffer.hpp>
+#include "./graphics/font.hpp"
 
 #define ENGINE_VERSION 1
 
@@ -29,6 +30,7 @@ namespace{
             }
             LITE3D_GAME::on_frame();
             Window::display();
+            Window::updateFPS();
         }
     }
 
@@ -57,6 +59,8 @@ namespace Lite3D{
         Window::initialize("Lite3D",{1280,720});
         Event::initialize();
         Logger::info("Window initialized");
+        FontLoader::initialize();
+        Logger::info("FontLoader initialized");
         set_icon();
         LITE3D_GAME::on_initialize();
         loop();
@@ -64,6 +68,7 @@ namespace Lite3D{
         terminate();
     }
     void terminate(){
+        Logger::info("Shutting down");
         GameLDR::unload();
         Window::terminate();
         ShaderBuffer::delete_all();

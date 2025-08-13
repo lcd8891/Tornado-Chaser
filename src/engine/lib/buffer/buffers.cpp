@@ -45,6 +45,15 @@ namespace TextureBuffer{
         }
         t_buffer.clear();
     }
+    void setTexture(std::string _i, Texture* _t){
+        auto it = t_buffer.find(_i);
+        if(it != t_buffer.end()){
+            delete it->second;
+            it->second = _t;
+        }else{
+            it->second = _t;
+        }
+    }
 }
 
 namespace ShaderBuffer{
@@ -84,5 +93,14 @@ namespace ShaderBuffer{
             delete pair.second;
         }
         s_buffer.clear();
+    }
+    void setShader(std::string _i, Shader* _s){
+        auto it = s_buffer.find(_i);
+        if(it !=s_buffer.end()){
+            delete it->second;
+            it->second = _s;
+        }else{
+            it->second = _s;
+        }
     }
 }

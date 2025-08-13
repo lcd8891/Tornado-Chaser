@@ -2,8 +2,16 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <lite3D/window/window.hpp>
+#include <lite3D/window/fpscounter.hpp>
 #include <glm/ext.hpp>
+#include <chrono>
 
+namespace FPSCounter{
+    float delta = 1.f / 60.f;
+    uint16 fps;
+    uint16 current_frames;
+    std::chrono::time_point<std::chrono::steady_clock> time;
+};
 namespace Window{
     GLFWwindow *window;
     vector2<int> size;
@@ -82,5 +90,16 @@ namespace Window{
         glm::mat4 mat = glm::translate(glm::mat4(1.f),glm::vec3(-1,1,0));
         mat = glm::scale(mat,glm::vec3(2.f / size.x,-2.f / size.y,1));
         return mat;
+    }
+    void updateFPS(){
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - FPSCounter::time).count();
+        FPSCounter::current_frames++;
+        if(elapsed>=1){
+            FPSCounter::fps = FPSCounter::current_frames;
+            FPSCounter::delta = 1.f / FPSCounter::fps;
+            FPSCounter::current_frames=0;
+            FPSCounter::time = now;
+        }
     }
 }

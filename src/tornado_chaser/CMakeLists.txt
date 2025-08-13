@@ -7,7 +7,7 @@ find_package(SFML CONFIG COMPONENTS network graphics system REQUIRED)
 add_executable(listener listener.cpp)
 add_library(tornado_chaser SHARED game.cpp)
 
-target_link_libraries(tornado_chaser PRIVATE lite3d lite_utils lite_buffer lite_glutils glfw sfml-network)
+target_link_libraries(tornado_chaser PRIVATE lite_utils lite_buffer lite_glutils glfw sfml-network lite_graphics lite3d) 
 target_link_libraries(listener PRIVATE sfml-network)
 target_include_directories(tornado_chaser PRIVATE ../src/engine/)
 
