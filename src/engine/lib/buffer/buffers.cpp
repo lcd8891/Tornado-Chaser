@@ -3,10 +3,12 @@
 #include <map>
 #include <lite3D/lite_utils.hpp>
 #include <filesystem>
+#include <lite3D/gui/screen.hpp>
 
 namespace {
     std::map<std::string,Texture*> t_buffer;
     std::map<std::string,Shader*> s_buffer;
+    std::map<std::string,Screen*> scr_buffer;
 }
 
 namespace TextureBuffer{
@@ -102,5 +104,36 @@ namespace ShaderBuffer{
         }else{
             it->second = _s;
         }
+    }
+}
+namespace ScreenBuffer{
+    //Screen* load_from_res(std::string _path,std::string _i);
+    void load_from_mem(std::string _i, Screen* _scr){
+        auto it = scr_buffer.find(_i);
+        if(it != scr_buffer.end()){
+            delete it->second;
+            it->second = _scr;
+        }else{
+            scr_buffer[_i] = _scr;
+        }
+    }
+    Screen* get(std::string _i){
+        auto it = scr_buffer.find(_i);
+        return (it != scr_buffer.end()) ? it->second : nullptr;
+    }
+    void delete_screen(std::string _i){
+        auto it = scr_buffer.find(_i);
+        if(it != scr_buffer.end()){
+            delete it->second;
+            scr_buffer.erase(_i);
+        }else{
+            Logger::error("trying to delete non exists screen!");
+        }
+    }
+    void delete_all(){
+        for (auto& pair : scr_buffer) {
+            delete pair.second;
+        }
+        scr_buffer.clear();
     }
 }

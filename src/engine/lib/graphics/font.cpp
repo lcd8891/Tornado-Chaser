@@ -1,29 +1,18 @@
 #include <freetype2/ft2build.h>
 #include "./font.hpp"
-#include <map>
 #include <lite3D/glutils/texture.hpp>
-#include <lite3D/lite_utils.hpp>
 #include <fstream>
 #include <GL/gl.h>
 #include "../buffer/loc_buffer.hpp"
 #include FT_FREETYPE_H
 
 #define FONT_ATLAS_SIZE 2048
-#define CHAR_SIZE 64
 
 struct CharMeta;
 
 namespace{
     FT_Library ft;
-    std::map<int,CharMeta> charMap;
 }
-
-struct CharMeta{
-    vector2<float> position;
-    vector2<float> size;
-    vector2<int> bearing;
-    float advance;
-};
 
 struct Locale{
     uint16 charCount;
@@ -31,8 +20,9 @@ struct Locale{
 };
 
 namespace FontLoader{
+    std::map<int,CharMeta> charMap;
     void initialize(){
-        if(!FT_Init_FreeType(&ft)){
+        if(FT_Init_FreeType(&ft)){
             throw EXIT_INFO("Couldn't initialize freetype library!");
         }
     }
@@ -73,8 +63,9 @@ namespace FontLoader{
                 }
             }
             CharMeta ch;
-            ch.position = {(float)pos.x/FONT_ATLAS_SIZE,(float)pos.y/FONT_ATLAS_SIZE};
-            ch.size = {(float)bitmap.width/FONT_ATLAS_SIZE,(float)bitmap.rows/FONT_ATLAS_SIZE};
+            ch.tex_position = {(float)pos.x/FONT_ATLAS_SIZE,(float)pos.y/FONT_ATLAS_SIZE};
+            ch.tex_size = {(float)bitmap.width/FONT_ATLAS_SIZE,(float)bitmap.rows/FONT_ATLAS_SIZE};
+            ch.size = {bitmap.width,bitmap.rows};
             ch.bearing = {face->glyph->bitmap_left,face->glyph->bitmap_top};
             ch.advance = face->glyph->advance.x;
             charMap[c] = ch;
@@ -100,8 +91,9 @@ namespace FontLoader{
                 }
             }
             CharMeta ch;
-            ch.position = {(float)pos.x/FONT_ATLAS_SIZE,(float)pos.y/FONT_ATLAS_SIZE};
-            ch.size = {(float)bitmap.width/FONT_ATLAS_SIZE,(float)bitmap.rows/FONT_ATLAS_SIZE};
+            ch.tex_position = {(float)pos.x/FONT_ATLAS_SIZE,(float)pos.y/FONT_ATLAS_SIZE};
+            ch.tex_size = {(float)bitmap.width/FONT_ATLAS_SIZE,(float)bitmap.rows/FONT_ATLAS_SIZE};
+            ch.size = {bitmap.width,bitmap.rows};
             ch.bearing = {face->glyph->bitmap_left,face->glyph->bitmap_top};
             ch.advance = face->glyph->advance.x;
             charMap[c] = ch;

@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <lite3D/lite_buffer.hpp>
 #include "./graphics/font.hpp"
+#include "gui/loc_screen.hpp"
 
 #define ENGINE_VERSION 1
 
@@ -25,6 +26,7 @@ namespace{
     void loop(){
         while(!Window::isClose()){
             Event::pollEvents();
+            ScreenManager::update();
             if(Event::key(KBKey::F1)){
                 process_f1();
             }
@@ -61,8 +63,21 @@ namespace Lite3D{
         Logger::info("Window initialized");
         FontLoader::initialize();
         Logger::info("FontLoader initialized");
+        ScreenManager::initialize();
+        Logger::info("Screen initialized");
         set_icon();
         LITE3D_GAME::on_initialize();
+        if(!ScreenManager::getCurrentScreen()){
+            Logger::waning("No gui detected. Using default");
+            if(!ScreenBuffer::get("default")){
+                Logger::error("No default gui defined!");
+                Screen* scr = new Screen(false);
+                ScreenBuffer::load_from_mem("default",scr);
+                ScreenManager::setScreen("default");
+            }else{
+                ScreenManager::setScreen("default");
+            }
+        }
         loop();
         LITE3D_GAME::on_exit();
         terminate();
@@ -73,5 +88,7 @@ namespace Lite3D{
         Window::terminate();
         ShaderBuffer::delete_all();
         TextureBuffer::delete_all();
+        ScreenBuffer::delete_all();
+        ScreenManager::finalize();
     }
 }

@@ -4,15 +4,18 @@
 #include <string>
 #include <glm/matrix.hpp>
 #include <lite3D/graphics/camera.hpp>
+#include <lite3D/lite_gui.hpp>
 namespace{
     Mesh* mesh;
     Shader* shader;
     Camera* camera;
     float cam[2] = {0.f,0.f};
     float speed = 5.f;
+    std::string *text = new std::string("FPS: -");
 }
 
 extern "C" void game_on_initialize(){
+    Window::setTitle("Tornado Chaser");
     LiteGL::clearColor(0.2,0.2,0.2);
     LiteGL::setParam(GL_Param::CullFace,true);
     LiteGL::setParam(GL_Param::DepthTest,false);
@@ -27,17 +30,22 @@ extern "C" void game_on_initialize(){
         1,1,0,
         0,1,1
     };
-    int attrs[] = {3,0};
+    int attrs[] = {3};
     mesh = new Mesh(vertices,9,attrs);
     shader = ShaderBuffer::load_from_res("shader","main");
     camera = new Camera({-2,0,0});
 	cam[1]=glm::radians(180.f);
 	camera->rotate({cam[0],cam[1],0});
     camera->setFOV(90);
+    Screen* scr = new Screen(false,true);
+    scr->addItem(new ScreenItems::StaticText({10,10},"sample text"));
+    ScreenBuffer::load_from_mem("default",scr);
+    *text = "a";
 }//When engine has been initalized.
 
 extern "C" void game_on_frame(){
-    Window::setTitle("Tornado Chaser FPS:"+std::to_string(FPSCounter::fps));
+    //*text = "FPS: " + std::to_string(FPSCounter::fps);
+    Window::setTitle("FPS: " + std::to_string(FPSCounter::fps));
     if(Event::key(KBKey::W)){
         camera->position += camera->dir * glm::vec3(FPSCounter::delta * speed);
     }
@@ -70,6 +78,7 @@ extern "C" void game_on_frame(){
     shader->use();
     shader->uniformMatrix("view",camera->getProjection() * camera->getView());
     mesh->draw(Primitive::Triangles);
+    //ScreenManager::draw();
 }//Before engine show frame.
 
 extern "C" void game_on_exit(){
