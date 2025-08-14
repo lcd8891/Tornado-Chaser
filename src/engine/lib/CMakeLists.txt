@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.5)
 
 find_package(glfw3 REQUIRED)
 find_package(SFML CONFIG COMPONENTS graphics system REQUIRED)
@@ -18,16 +18,13 @@ add_library(args STATIC args.cpp)
 target_link_libraries(lite_window PUBLIC glfw PRIVATE OpenGL::GL GLEW::GLEW)
 target_link_libraries(lite_glutils PRIVATE OpenGL::GL GLEW::GLEW sfml-graphics)
 target_link_libraries(lite_utils PRIVATE args)
-target_link_libraries(lite_graphics PRIVATE lite_buffer Freetype)
+target_link_libraries(lite_graphics PRIVATE lite_buffer ${FREETYPE_LIBRARIES})
 target_link_libraries(lite_buffer PRIVATE lite_utils)
 target_link_libraries(lite_gui PRIVATE lite_utils lite_buffer lite_glutils lite_window lite_graphics)
 
 target_compile_definitions(lite_window PRIVATE _GLFW_WAYLAND)
 
-if(LINUX)
-target_include_directories(lite_graphics PRIVATE /usr/include/freetype2)
-endif()
-
+target_include_directories(lite_graphics PRIVATE ${FREETYPE_INCLUDE_DIRS})
 add_library(lite3d SHARED lite3d.cpp)
 
 target_link_libraries(lite3d PRIVATE lite_window lite_utils lite_buffer lite_glutils gameldr args sfml-graphics lite_graphics lite_gui)
