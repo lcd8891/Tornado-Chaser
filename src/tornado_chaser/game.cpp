@@ -4,6 +4,7 @@
 #include <string>
 #include <glm/matrix.hpp>
 #include <lite3D/graphics/camera.hpp>
+#include <lite3D/lite_gui.hpp>
 namespace{
     Mesh* mesh;
     Shader* shader;
@@ -31,17 +32,14 @@ extern "C" void game_on_initialize(){
     };
     int attrs[] = {3};
     mesh = new Mesh(vertices,9,attrs);
-
     shader = ShaderBuffer::load_from_res("shader","main");
     camera = new Camera({-2,0,0});
 	cam[1]=glm::radians(180.f);
 	camera->rotate({cam[0],cam[1],0});
     camera->setFOV(90);
-
-    //Screen* scr = new Screen(false,true);
-    //->addItem(new ScreenItems::StaticText({10,10},"sample text"));
-    //ScreenBuffer::load_from_mem("default",scr);
-    //ScreenManager::setScreen("default");
+    Screen* scr = new Screen(false,true);
+    scr->addItem(new ScreenItems::StaticText({10,10},"sample text"));
+    ScreenBuffer::load_from_mem("default",scr);
     *text = "a";
 }//When engine has been initalized.
 

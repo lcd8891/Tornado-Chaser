@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.9)
 project(tornado_catcher)
 
 set(CMAKE_CXX_STANDART 17)
