@@ -62,6 +62,7 @@ namespace Lite3D{
         Event::initialize();
         Logger::info("Window initialized");
         FontLoader::initialize();
+        FontLoader::updateLocale("russian");
         Logger::info("FontLoader initialized");
         ScreenManager::initialize();
         Logger::info("Screen initialized");

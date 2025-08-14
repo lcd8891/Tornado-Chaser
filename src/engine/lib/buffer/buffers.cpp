@@ -53,7 +53,7 @@ namespace TextureBuffer{
             delete it->second;
             it->second = _t;
         }else{
-            it->second = _t;
+            t_buffer[_i] = _t;
         }
     }
 }
@@ -102,7 +102,7 @@ namespace ShaderBuffer{
             delete it->second;
             it->second = _s;
         }else{
-            it->second = _s;
+            s_buffer[_i] = _s;
         }
     }
 }

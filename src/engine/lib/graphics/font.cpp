@@ -67,7 +67,7 @@ namespace FontLoader{
             ch.tex_size = {(float)bitmap.width/FONT_ATLAS_SIZE,(float)bitmap.rows/FONT_ATLAS_SIZE};
             ch.size = {bitmap.width,bitmap.rows};
             ch.bearing = {face->glyph->bitmap_left,face->glyph->bitmap_top};
-            ch.advance = face->glyph->advance.x;
+            ch.advance = (float)(face->glyph->advance.x >> 6);
             charMap[c] = ch;
             pos.x += bitmap.width+1;
             maxrow = std::max(maxrow,(int)bitmap.rows+1);
@@ -102,7 +102,8 @@ namespace FontLoader{
         }
         FT_Done_Face(face);
         Logger::info("locale updated to "+_locale);
-        TextureBuffer::setTexture("glyph_atlas",new Texture(atlasData,{FONT_ATLAS_SIZE,FONT_ATLAS_SIZE},GL_RED));
+        Texture *texture = new Texture(atlasData,{FONT_ATLAS_SIZE,FONT_ATLAS_SIZE},GL_RED);
+        TextureBuffer::setTexture("glyph_atlas",texture);
     }
     void cleanup(){
         FT_Done_FreeType(ft);

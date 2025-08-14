@@ -11,7 +11,7 @@ Texture::Texture(void *pixdata, vector2<uint32> size,int colormode,bool linear){
     glGenTextures(1,&ID);
     glBindTexture(GL_TEXTURE_2D,ID);
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-    glTexImage2D(GL_TEXTURE_2D,0,colormode,size.x,size.y,0,GL_RGBA,GL_UNSIGNED_BYTE,pixdata);
+    glTexImage2D(GL_TEXTURE_2D,0,colormode,size.x,size.y,0,colormode,GL_UNSIGNED_BYTE,pixdata);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (linear) ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (linear) ? GL_LINEAR : GL_NEAREST);
     glGenerateMipmap(GL_TEXTURE_2D);

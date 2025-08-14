@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.9.0)
 
 set(CMAKE_BUILD_TYPE Debug)
 find_package(glfw3 REQUIRED)
